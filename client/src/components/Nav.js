@@ -5,13 +5,11 @@ import "../styles/nav.css"
 
 class Nav extends Component {
     renderContent() {
-        switch (this.props.user) {
-            case null:
-                return;
-            case false:
-                return <a className="nav-link" href="/auth/google">Sign in with Google</a>;
-            default: 
-                return <a className="nav-link" href="/api/user/logout">Logout</a>
+        if (this.props.user) {
+            return [
+                <a key="1" className="nav-link" href="/api/user/logout">Logout</a>,
+                <span key="2">{ this.props.user.firstName }</span>
+            ]
         }
     }
     render() {
