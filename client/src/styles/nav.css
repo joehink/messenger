@@ -1,0 +1,14 @@
+nav {
+    background-color: #8C8D8F;
+    display: flex;
+    padding: 1rem;
+    align-items: center;
+}
+
+#brand {
+    margin-right: auto;
+    color: #F5F7F2;
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 2em;
+}
