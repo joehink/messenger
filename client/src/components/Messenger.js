@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import SideBar from "./SideBar";
 
 import { userConnected } from "../actions";
 
@@ -11,14 +12,13 @@ class Messenger extends Component {
     render() {
         return (
             <div>
-                Messenger
+                <SideBar />
             </div>
         );
     }
 }
 
 const mapStateToProps = state => {
-    console.log(state.socket)
     return { socket: state.socket }
 }
 

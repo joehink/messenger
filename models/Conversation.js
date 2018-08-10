@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const conversationSchema = new Schema({
-    participants: [],
-    lastUpdated: Date,
-    messages: [],
+    participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 mongoose.model("conversations", conversationSchema);
