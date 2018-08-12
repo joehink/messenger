@@ -1,3 +1,9 @@
 export const FETCH_USER = "fetch_user";
 export const SEARCH_USERS = "search_users";
 export const USER_CONNECTED = "user_connected";
+export const FETCH_CONVERSATIONS = "fetch_conversations";
+export const SET_SELECTED_CONVERSATION = "set_selected_conversation";
+export const COMPOSE_MESSAGE = "compose_message";
+export const SET_NEW_MESSAGE = "set_new_message";
+export const UPDATE_CONVERSATIONS = "update_conversations"; 
+export const UPDATE_CURRENT_MESSAGES = "update_current_messages";

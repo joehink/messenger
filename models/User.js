@@ -7,8 +7,9 @@ const userSchema = new Schema({
     firstName: String,
     lastName: String,
     profileIMG: String,
-    pendingRequests: [],
-    contacts: [],
+    pendingRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    sentRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 mongoose.model("users", userSchema);

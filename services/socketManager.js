@@ -2,20 +2,22 @@ module.exports = io => {
     const users = {};
 
     io.on("connection", socket => {
-        socket.on("create_conversation", conversation => {
-            socket.join(conversation);
+        socket.on("login", userID => {
+            users[userID] = socket.id;
+            console.log(users)
         })
-
-        socket.on("leave_conversation", conversation => {
-            socket.leave(conversation);
-        })
-
-        socket.on("send_message", conversation => {
-            io.to(`${socketId}`).emit('message', 'I just met you');
-        })
-
+        
         socket.on("disconnect", () => {
+            for (let user in users) {
+                if (users[user] === socket.id) {
+                    delete users[user]
+                    console.log(users);
+                }
+            }
+        })
 
+        socket.on("SEND_MESSAGE", message => {
+            socket.to(users[message.to]).emit("DELIVER_MESSAGE", message)
         })
     })
 }

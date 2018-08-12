@@ -19,3 +19,20 @@ export const searchUsers = searchTerm =>
         });
     };
 
+export const sendRequest = event => 
+    async dispatch => {
+        const res = await axios.put(`/api/request/send/${event.target.value}`)
+        dispatch({
+            type: FETCH_USER,
+            payload: res.data
+        })
+    }
+
+export const acceptRequest = event => 
+    async dispatch => {
+        const res = await axios.put(`/api/request/accept/${event.target.value}`)
+        dispatch({
+            type: FETCH_USER,
+            payload: res.data
+        })
+    }

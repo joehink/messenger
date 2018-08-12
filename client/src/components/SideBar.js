@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 
 import ConversationList from "./ConversationList";
 import ContactList from "./ContactList";
-import RequestList from "./RequestList";
+import SearchResults from "./SearchResults";
 
 import { searchUsers } from "../actions";
 
@@ -14,25 +14,28 @@ class SideBar extends Component {
     renderList() {
         switch (this.state.list) {
             case "conversations":
-                return <ConversationList />;
+                return <ConversationList conversations={this.props.conversations} />;
             case "contacts":
-                return <ContactList />;
-            case "requests":
-                return <RequestList />;
+                return <ContactList contacts={this.props.user.contacts}/>;
             default: 
                 return;
         }
     }
+    renderSearchResults() {
+        if (this.props.search) {
+            return <SearchResults results={this.props.search} />
+        }
+    }
     render() {
         return (
-            <div>
-                <div>
+            <div id="sideBar">
+                <div className="search">
                     <input type="text" onChange={text => this.props.searchUsers(text.target.value)} />
+                    { this.renderSearchResults() }
                 </div>
                 <div>
-                    <a onClick={() => this.setState({ list: "conversations" })}>Conversations</a>
-                    <a onClick={() => this.setState({ list: "contacts" })}>Contacts</a>
-                    <a onClick={() => this.setState({ list: "requests" })}>Requests</a>
+                    <button onClick={() => this.setState({ list: "conversations" })}>Conversations</button>
+                    <button onClick={() => this.setState({ list: "contacts" })}>Contacts</button>
                 </div>
                 { this.renderList() }
             </div>
@@ -41,7 +44,7 @@ class SideBar extends Component {
 }
 
 const mapStateToProps = state => {
-    return { search: state.search }
+    return { search: state.search, user: state.user, conversations: state.conversations.conversations }
 }
 
 export default connect(mapStateToProps, { searchUsers })(SideBar);

@@ -1,57 +1,57 @@
-const Conversation = require("../models/Conversation");
-const Message = require("../models/Message");
+const mongoose = require("mongoose");
+const Conversation = mongoose.model("conversations");
+const Message = mongoose.model("messages");
+const User = mongoose.model("users");
 
 module.exports = app => {
     // Get a user's conversations and the most recent message
     app.get("/api/conversations", async (req, res) => {
         const conversations = await Conversation.find({ participants: req.user.id })
-                .select("_id")
+                .populate({ path: "participants", model: User })
+                .lean()
                 .exec();
         const userConversations = conversations.map(async conversation => {
-            const message = await Message.find({ conversationID: conversation.id })
+            const message = await Message.find({ conversationID: conversation._id })
                     .sort("-createdAt")
                     .limit(1)
                     .populate({
-                        path: "author",
-                        select: "firstName lastName"
+                        path: "author", model: User
                     })
                     .exec();
-            conversation.recentMessage = {
-                body: message.body,
-                authorFirst: message.author.firstName,
-                authorLast: message.author.lastName,
-            }
+                conversation.recentMessage = message;
             return conversation;
         })
-        res.send({ conversations: userConversations })
+        Promise.all(userConversations).then(values => {
+            res.send({ conversations: values })
+        })
     })
 
     // Get a single conversation
     app.get("/api/conversations/:conversationID", async (req, res) => {
+        let conversation = await Conversation.findById(req.params.conversationID);
         const messages = await Message.find({ conversationID: req.params.conversationID })
-            .select("createsAt body author")
             .sort("-createdAt")
             .populate({
-                path: "author",
-                select: "firstName lastName"
+                path: "author", model: User
             })
             .exec();
-        res.send({messages});
+        res.send({conversation, messages});
     })
 
     // Create a new conversation
     app.post("/api/conversations/new/:recipientID", async (req, res) => {
         const conversation = await new Conversation({
-            participants: [req.user.id, req.params.recipentID]
+            participants: [req.user.id, req.params.recipientID]
         }).save();
 
-        const message = new Message({
+        const message = await new Message({
             conversationID: conversation.id,
             body: req.body.message,
-            author: req.user.id
+            author: req.user.id,
+            to: req.params.recipientID
         }).save();
-
-        res.send({conversation: conversation.id})
+        
+        res.send({conversation, message})
     });
 
     // Send message in conversation
@@ -59,9 +59,10 @@ module.exports = app => {
         const message = await new Message({
             conversationID: req.params.conversationID,
             body: req.body.message,
-            author: req.user.id
+            author: req.user.id,
+            to: req.body.to
         }).save();
 
-        res.send();
+        res.send({ message });
     });
 }

@@ -1,0 +1,50 @@
+#messenger {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 10fr 1fr;
+    grid-template-areas: "sideBar conversation"
+                         "sideBar textInput"
+}
+
+#sideBar {
+    grid-area: sideBar;
+    display: flex;
+    flex-direction: column;
+    background-color: blue;
+} 
+
+#sideBar input[type=text] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+}
+
+#searchResults {
+    position: relative;
+}
+
+#searchResults .list {
+    position: absolute;
+    background-color: white;
+    width: 100%;
+}
+
+#contactList {
+    background-color: white;
+    flex: 1;
+}
+
+#contactList .selected {
+    background-color: #eee;
+}
+
+#conversation {
+    grid-area: conversation;
+    background-color: green;
+}
+
+#textInput {
+    grid-area: textInput;
+    background-color: red
+} 
