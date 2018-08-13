@@ -30,7 +30,7 @@ module.exports = app => {
     app.get("/api/conversations/:conversationID", async (req, res) => {
         let conversation = await Conversation.findById(req.params.conversationID);
         const messages = await Message.find({ conversationID: req.params.conversationID })
-            .sort("-createdAt")
+            .sort("createdAt")
             .populate({
                 path: "author", model: User
             })
@@ -42,7 +42,14 @@ module.exports = app => {
     app.post("/api/conversations/new/:recipientID", async (req, res) => {
         const conversation = await new Conversation({
             participants: [req.user.id, req.params.recipientID]
-        }).save();
+        })
+        .save();
+
+        const fullConversation = await Conversation.findById(conversation.id)
+                                        .populate({
+                                            path: "participants", model: User
+                                        })
+                                        .exec()
 
         const message = await new Message({
             conversationID: conversation.id,
@@ -51,7 +58,7 @@ module.exports = app => {
             to: req.params.recipientID
         }).save();
         
-        res.send({conversation, message})
+        res.send({conversation: fullConversation, message})
     });
 
     // Send message in conversation

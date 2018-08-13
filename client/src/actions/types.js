@@ -6,4 +6,4 @@ export const SET_SELECTED_CONVERSATION = "set_selected_conversation";
 export const COMPOSE_MESSAGE = "compose_message";
 export const SET_NEW_MESSAGE = "set_new_message";
 export const UPDATE_CONVERSATIONS = "update_conversations"; 
-export const UPDATE_CURRENT_MESSAGES = "update_current_messages";
+export const SET_NEW_CONVERSATION = "set_new_conversation";

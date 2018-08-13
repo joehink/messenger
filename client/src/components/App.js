@@ -11,14 +11,15 @@ import Messenger from "./Messenger";
 
 class App extends Component {
     componentDidMount() {
-        this.props.fetchUser();
+        const { fetchUser } = this.props;
+        fetchUser();
     }
     renderSignIn() {
-        if (!this.props.user) {
-            return <SignIn />
-        } else {
+        const { user } = this.props;
+        if (user) {
             return <Messenger />
-        }
+        } 
+        return <SignIn />
     }
     render() {
         return (
@@ -31,7 +32,8 @@ class App extends Component {
 };
 
 function mapStateToProps(state) {
-    return { user: state.user };
+    const { user } = state;
+    return { user };
 }
 
 export default connect(mapStateToProps, { fetchUser })(App);

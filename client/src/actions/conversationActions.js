@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { FETCH_CONVERSATIONS, SET_SELECTED_CONVERSATION, COMPOSE_MESSAGE, SET_NEW_MESSAGE, UPDATE_CURRENT_MESSAGES } from "./types";
+import { FETCH_CONVERSATIONS, SET_SELECTED_CONVERSATION, COMPOSE_MESSAGE, SET_NEW_MESSAGE, SET_NEW_CONVERSATION } from "./types";
 
 export const fetchConversations = () => 
     async dispatch => {
@@ -8,6 +8,21 @@ export const fetchConversations = () =>
         dispatch({
             type: FETCH_CONVERSATIONS,
             payload: res.data.conversations
+        })
+    }
+
+export const findConversation = (user, conversation) => 
+    async dispatch => {
+        const res = await axios.get(`/api/conversations/${conversation._id}`)
+        const participant = conversation.participants.find(participant => user._id !== participant._id)
+        dispatch({
+            type: SET_SELECTED_CONVERSATION,
+            payload: {
+                id: res.data.conversation._id,
+                participant,
+                messages: res.data.messages,
+                draftedMessage: ""
+            }
         })
     }
 
@@ -72,11 +87,9 @@ export const sendMessageOrCreateConversation = (conversation, socket) =>
     }
 
 export const addMessage = (message, conversations) => {
-    if (message.conversationID === conversations.selected.id) {
-        console.log("heyyy")
-        
+    if (message.conversationID === conversations.selected.id) {   
         return {
-                type: UPDATE_CURRENT_MESSAGES,
+                type: SET_NEW_MESSAGE,
                 payload: message
             }
     } else {
@@ -88,8 +101,17 @@ export const addMessage = (message, conversations) => {
             return conversation;
         })
         return { type: FETCH_CONVERSATIONS, payload: newConversations }
-    }
-    
-    
+    } 
 }
 
+export const addConversation = data => {
+    return { 
+        type: SET_NEW_CONVERSATION,
+        payload: {
+            ...data.conversation,
+            recentMessage: {
+                ...data.message
+            }
+        }
+     }
+}

@@ -4,19 +4,20 @@ import { sendRequest, acceptRequest } from "../actions";
 
 class SearchResults extends Component {
     renderRequestStatus(result) {
-        if (this.props.user.sentRequests.includes(result._id)) {
+        const { user, acceptRequest, sendRequest } = this.props;
+        if (user.sentRequests.includes(result._id)) {
             return <p>Request sent</p>
-        } else if (this.props.user.pendingRequests.includes(result._id)) {
+        } else if (user.pendingRequests.includes(result._id)) {
             return <button 
                         value={result._id}
-                        onClick={event => this.props.acceptRequest(event)}
+                        onClick={event => acceptRequest(event)}
                     >
                         Accept request
                     </button>
-        } else if (!this.props.user.contacts.some(contact => contact._id === result._id)) {
+        } else if (!user.contacts.some(contact => contact._id === result._id)) {
             return <button 
                         value={result._id}
-                        onClick={event => this.props.sendRequest(event)}
+                        onClick={event => sendRequest(event)}
                     >
                         Send request
                     </button>
@@ -25,8 +26,9 @@ class SearchResults extends Component {
         }
     }
     renderResults() {
-        return this.props.results.map(result => {
-            if (this.props.user._id !== result._id) {
+        const { results, user } = this.props;
+        return results.map(result => {
+            if (user._id !== result._id) {
                 return (    
                     <div style={{ display: "flex", alignItems: "center" }} key={result._id}>
                         <img src={result.profileIMG} alt={result.fullName}/>
@@ -51,7 +53,8 @@ class SearchResults extends Component {
 }
 
 const mapStateToProps = state => {
-    return { user: state.user }
+    const { user } = state;
+    return { user }
 }
 
 export default connect(mapStateToProps, { sendRequest, acceptRequest })(SearchResults);

@@ -1,4 +1,3 @@
-import io from "socket.io-client";
 import { USER_CONNECTED } from "./types";
 
 export const userConnected = (socket) => 

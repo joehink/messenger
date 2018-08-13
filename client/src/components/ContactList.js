@@ -3,15 +3,16 @@ import { connect } from "react-redux";
 import { acceptRequest, findOrBeginConversation } from "../actions";
 
 class ContactList extends Component {
-    state = {
-        selected: ""
-    }
+    state = { selected: "" }
     onContactClick(contact) {
+        const { findOrBeginConversation, user, conversations } = this.props;
+
         this.setState({ selected: contact._id })
-        this.props.findOrBeginConversation(this.props.user, contact, this.props.conversations)
+        findOrBeginConversation(user, contact, conversations)
     }
     renderContacts() {
-        return this.props.contacts.map(contact => {
+        const { contacts } = this.props;
+        return contacts.map(contact => {
             return (    
                 <div 
                     className={contact._id === this.state.selected ? "selected": ""} 
@@ -35,7 +36,8 @@ class ContactList extends Component {
 }
 
 const mapStateToProps = state => {
-    return { user: state.user, conversations: state.conversations.conversations }
+    const { user, conversations } = state;
+    return { user, conversations: conversations.conversations }
 }
 
 export default connect(mapStateToProps, { acceptRequest, findOrBeginConversation })(ContactList);

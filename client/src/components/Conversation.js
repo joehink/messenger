@@ -5,17 +5,17 @@ import { userConnected } from "../actions";
 
 class Conversation extends Component {
     renderMessages() {
-        if (this.props.conversation.selected.messages) {
-            return this.props.conversation.selected.messages.map(message => {
+        const { messages } = this.props;
+        if (messages) {
+            return messages.map(message => {
                 return <p key={message._id}>{message.body}</p>
             })
         }
     }
     renderConversation() {
-        if (this.props.conversation.selected.participant) {
-            return (
-                <p>{this.props.conversation.selected.participant.fullName}</p>
-            )
+        const { participant } = this.props;
+        if (participant) {
+            return <p>{participant.fullName}</p>
         }
     }
     render() {
@@ -29,8 +29,8 @@ class Conversation extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state.conversations.selected)
-    return { socket: state.socket, conversation: state.conversations }
+    const { messages, participant } = state.conversations.selected;
+    return { messages, participant }
 }
 
 export default connect(mapStateToProps, { userConnected })(Conversation);

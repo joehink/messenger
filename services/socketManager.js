@@ -19,5 +19,9 @@ module.exports = io => {
         socket.on("SEND_MESSAGE", message => {
             socket.to(users[message.to]).emit("DELIVER_MESSAGE", message)
         })
+        
+        socket.on("NEW_CONVERSATION", conversation => {
+            socket.to(users[conversation.message.to]).emit("ADD_CONVERSATION", conversation)
+        })
     })
 }

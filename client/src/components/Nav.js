@@ -5,10 +5,11 @@ import "../styles/nav.css"
 
 class Nav extends Component {
     renderContent() {
-        if (this.props.user) {
+        const { user } = this.props;
+        if (user) {
             return [
                 <a key="1" className="nav-link" href="/api/user/logout">Logout</a>,
-                <span key="2">{ this.props.user.firstName }</span>
+                <span key="2">{ user.firstName }</span>
             ]
         }
     }
@@ -23,7 +24,8 @@ class Nav extends Component {
 };
 
 function mapStateToProps(state) {
-    return { user: state.user }
+    const { user } = state;
+    return { user }
 }
 
 export default connect(mapStateToProps)(Nav);

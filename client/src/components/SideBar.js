@@ -8,29 +8,30 @@ import SearchResults from "./SearchResults";
 import { searchUsers } from "../actions";
 
 class SideBar extends Component {
-    state = {
-        list: "conversations"
-    };
+    state = { list: "conversations" };
     renderList() {
+        const { user, conversations } = this.props;
         switch (this.state.list) {
             case "conversations":
-                return <ConversationList conversations={this.props.conversations} />;
+                return <ConversationList conversations={conversations} />;
             case "contacts":
-                return <ContactList contacts={this.props.user.contacts}/>;
+                return <ContactList contacts={user.contacts}/>;
             default: 
                 return;
         }
     }
     renderSearchResults() {
-        if (this.props.search) {
-            return <SearchResults results={this.props.search} />
+        const { search } = this.props;
+        if (search) {
+            return <SearchResults results={search} />
         }
     }
     render() {
+        const { searchUsers } = this.props;
         return (
             <div id="sideBar">
                 <div className="search">
-                    <input type="text" onChange={text => this.props.searchUsers(text.target.value)} />
+                    <input type="text" onChange={event => searchUsers(event.target.value)} />
                     { this.renderSearchResults() }
                 </div>
                 <div>
@@ -44,7 +45,8 @@ class SideBar extends Component {
 }
 
 const mapStateToProps = state => {
-    return { search: state.search, user: state.user, conversations: state.conversations.conversations }
+    const { search, user, conversations } = state;
+    return { search, user, conversations: conversations.conversations }
 }
 
 export default connect(mapStateToProps, { searchUsers })(SideBar);

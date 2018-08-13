@@ -8,7 +8,7 @@ import SideBar from "./SideBar";
 import Conversation from "./Conversation";
 import TextInput from "./TextInput";
 
-import { userConnected, fetchConversations, addMessage } from "../actions";
+import { userConnected, fetchConversations, addMessage, addConversation } from "../actions";
 
 const socket = io("http://localhost:5000");
 
@@ -16,18 +16,32 @@ class Messenger extends Component {
     componentDidMount() {
         this.socket = io("http://localhost:5000");
         const { user, userConnected, fetchConversations } = this.props;
-        this.socket.emit("login", user._id)
-        this.socket.on("DELIVER_MESSAGE", message => {
-            this.preMessage(message);
-        })
+
         if (user) {
             userConnected(socket)
             fetchConversations();
         }
+
+        this.socket.emit("login", user._id)
+
+        this.socket.on("DELIVER_MESSAGE", message => {
+            this.listeners("DELIVER_MESSAGE", message);
+        })
+
+        this.socket.on("ADD_CONVERSATION", conversation => {
+            this.listeners("ADD_CONVERSATION", conversation)
+        })
     }
-    preMessage(message) {
-        const { addMessage, conversations } = this.props
-        addMessage(message, conversations)
+    listeners(event, data) {
+        const { addMessage, conversations, addConversation } = this.props
+        switch (event) {
+            case "DELIVER_MESSAGE":
+                return addMessage(data, conversations)
+            case "ADD_CONVERSATION":
+                return addConversation(data)
+            default:
+                return;
+        }
     }
     render() {
         return (
@@ -42,9 +56,8 @@ class Messenger extends Component {
 
 const mapStateToProps = state => {
     const { socket, user, conversations } = state;
-    console.log(conversations)
     return { socket, user, conversations }
 }
 
 
-export default connect(mapStateToProps, { userConnected, fetchConversations, addMessage })(Messenger);
+export default connect(mapStateToProps, { userConnected, fetchConversations, addMessage, addConversation })(Messenger);
