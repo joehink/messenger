@@ -13,23 +13,30 @@ class ContactList extends Component {
     renderContacts() {
         const { contacts } = this.props;
         return contacts.map(contact => {
-            return (    
-                <div 
-                    className={contact._id === this.state.selected ? "selected": ""} 
-                    style={{ display: "flex", alignItems: "center" }} 
+            return ( 
+                <li 
                     key={contact._id}
+                    className={"list-group-item " + (contact._id === this.state.selected ? "selected": "")} 
                     onClick={() => this.onContactClick(contact)}
                 >
-                    <img src={contact.profileIMG} alt={contact.fullName}/>
-                    <p>{contact.fullName}</p>
-                </div>
+                    <div className="row w-100">
+                        <div className="col-2">
+                            <img src={contact.profileIMG} alt={contact.fullName} className="rounded-circle" />
+                        </div>
+                        <div className="col-10 align-self-center ">
+                            <label className="mb-0 pl-3">{contact.fullName}</label>
+                        </div>
+                    </div>
+                </li>   
             )   
         })
     }
     render() {
         return (
             <div id="contactList">
-                { this.renderContacts() }
+                <ul className="list-group list-group-flush">
+                    { this.renderContacts() }
+                </ul>
             </div>
         );
     };

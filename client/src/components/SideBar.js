@@ -8,7 +8,7 @@ import SearchResults from "./SearchResults";
 import { searchUsers } from "../actions";
 
 class SideBar extends Component {
-    state = { list: "conversations" };
+    state = { list: "conversations", showResults: false };
     renderList() {
         const { user, conversations } = this.props;
         switch (this.state.list) {
@@ -22,21 +22,38 @@ class SideBar extends Component {
     }
     renderSearchResults() {
         const { search } = this.props;
-        if (search) {
+        if (this.state.showResults) {
             return <SearchResults results={search} />
         }
     }
     render() {
         const { searchUsers } = this.props;
         return (
-            <div id="sideBar">
-                <div className="search">
-                    <input type="text" onChange={event => searchUsers(event.target.value)} />
+            <div id="sideBar" className="border-right">
+                <div className="search m-3" style={{minWidth: "300px"}}>
+                    <input 
+                        placeholder="Find Friends"
+                        type="text" 
+                        className="form-control"
+                        onFocus={() => this.setState({ showResults: true })}
+                        onBlur={() => this.setState({ showResults: false })}
+                        onChange={event => searchUsers(event.target.value)} 
+                    />
                     { this.renderSearchResults() }
                 </div>
-                <div>
-                    <button onClick={() => this.setState({ list: "conversations" })}>Conversations</button>
-                    <button onClick={() => this.setState({ list: "contacts" })}>Contacts</button>
+                <div className="d-flex justify-content-center">
+                    <button 
+                        className={"btn mr-3 mb-2 " + (this.state.list === "conversations" ? "btn-primary" : "btn-light" )} 
+                        onClick={() => this.setState({ list: "conversations" })}
+                    >
+                        Conversations
+                    </button>
+                    <button 
+                        className={"btn ml-3 mb-2 " + (this.state.list === "contacts" ? "btn-primary" : "btn-light" )} 
+                        onClick={() => this.setState({ list: "contacts" })}
+                    >
+                        Contacts
+                    </button>
                 </div>
                 { this.renderList() }
             </div>

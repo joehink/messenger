@@ -5,19 +5,21 @@ import { userConnected, composeMessage, sendMessageOrCreateConversation } from "
 
 const TextInput = ({ conversation, sendMessageOrCreateConversation, socket, composeMessage }) => {
     return (
-        <div id="textInput">
+        <form className="form-inline p-2 border-top" id="textInput" onSubmit={event => event.preventDefault()}>
             <button 
+                className="btn btn-primary mr-2"
                 disabled={!conversation.draftedMessage}
                 onClick={() => sendMessageOrCreateConversation(conversation, socket)}
             >
                 Send
             </button>
             <input 
+                className="flex-fill p-1"
                 disabled={!conversation.participant} type="text" 
                 onChange={event => composeMessage(event.target.value)}
                 value={conversation.draftedMessage}
             />
-        </div>
+        </form>
     );
     
 }
