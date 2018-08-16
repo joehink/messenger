@@ -1,19 +1,20 @@
 const express = require("express");
-const app = express();
-const http = require("http").Server(app)
-const io = require("socket.io")(http);
-require("./services/socketManager")(io);
 const mongoose = require("mongoose");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
 const bodyParser = require('body-parser');
-
 const keys = require("./config/keys");
-
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 require("./models/User");
 require("./models/Conversation");
 require("./models/Message")
+require("./services/passport");
+
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+
+const app = express();
+const http = require("http").Server(app)
+const io = require("socket.io")(http);
+require("./services/socketManager")(io);
 
 app.use(bodyParser.json())
 app.use(cookieSession({
@@ -22,9 +23,6 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-
-require("./services/passport");
 
 require("./routes/authRoutes")(app);
 require("./routes/userRoutes")(app);
