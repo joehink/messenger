@@ -18,7 +18,7 @@ module.exports = app => {
                         path: "author", model: User
                     })
                     .exec();
-                conversation.recentMessage = message;
+                conversation.recentMessage = message[0];
             return conversation;
         })
         Promise.all(userConversations).then(values => {
@@ -29,6 +29,13 @@ module.exports = app => {
     // Get a single conversation
     app.get("/api/conversations/:conversationID", async (req, res) => {
         let conversation = await Conversation.findById(req.params.conversationID);
+        console.log(conversation.notify, req.user.id)
+        if (String(conversation.notify) === req.user.id) {
+            conversation = await Conversation.findByIdAndUpdate(req.params.conversationID, {
+                notify: null
+            }, {new: true});
+        }
+    
         const messages = await Message.find({ conversationID: req.params.conversationID })
             .sort("createdAt")
             .populate({
@@ -41,7 +48,8 @@ module.exports = app => {
     // Create a new conversation
     app.post("/api/conversations/new/:recipientID", async (req, res) => {
         const conversation = await new Conversation({
-            participants: [req.user.id, req.params.recipientID]
+            participants: [req.user.id, req.params.recipientID],
+            notify: req.params.recipientID
         })
         .save();
 
@@ -63,6 +71,9 @@ module.exports = app => {
 
     // Send message in conversation
     app.post("/api/conversations/:conversationID", async (req, res) => {
+        await Conversation.findByIdAndUpdate(req.params.conversationID, {
+            notify: req.body.to
+        }).exec()
         const message = await new Message({
             conversationID: req.params.conversationID,
             body: req.body.message,
@@ -70,6 +81,23 @@ module.exports = app => {
             to: req.body.to
         }).save();
 
-        res.send({ message });
+        const conversations = await Conversation.find({ participants: req.user.id })
+                .populate({ path: "participants", model: User })
+                .lean()
+                .exec();
+        const userConversations = conversations.map(async conversation => {
+            const message = await Message.find({ conversationID: conversation._id })
+                    .sort("-createdAt")
+                    .limit(1)
+                    .populate({
+                        path: "author", model: User
+                    })
+                    .exec();
+                conversation.recentMessage = message[0];
+            return conversation;
+        })
+        Promise.all(userConversations).then(values => {
+            res.send({ conversations: values, message })
+        })
     });
 }

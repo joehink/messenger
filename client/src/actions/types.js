@@ -7,3 +7,7 @@ export const COMPOSE_MESSAGE = "compose_message";
 export const SET_NEW_MESSAGE = "set_new_message";
 export const UPDATE_CONVERSATIONS = "update_conversations"; 
 export const SET_NEW_CONVERSATION = "set_new_conversation";
+export const UPDATE_CONTACTS = "update_contacts";
+export const UPDATE_PENDING_REQUESTS = "update_pending_requests";
+export const UPDATE_SENT_REQUESTS = "update_sent_requests";
+export const UPDATE_SEARCH = "update_search";

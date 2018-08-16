@@ -11,6 +11,11 @@ class ConversationList extends Component {
         this.setState({ selected: conversation._id })
         findConversation(user, conversation)
     }
+    renderNotification(conversation) {
+        if (conversation.notify === this.props.user._id && this.props.selected.id !== conversation._id) {
+            return <span className="redDot"></span>
+        }
+    }
     renderConversations() {
         const { conversations, user } = this.props;
         if (conversations) {
@@ -26,18 +31,19 @@ class ConversationList extends Component {
                                 <img src={participant.profileIMG} alt={participant.fullName} className="rounded-circle" />
                             </div>
                             <div className="col-10 align-self-center">
-                                <div className="row pl-3 align-items-center">
+                                <div className="row pl-3 align-items-center" style={{ position: "relative" }}>
+                                    { this.renderNotification(conversation) }
                                     <label className="mb-0 pl-3">{participant.fullName}</label>
                                     <Moment 
                                         fromNow 
                                         className="font-weight-light font-italic ml-auto"
                                         style={{ fontSize: "10px", display: "block" }}
                                     >
-                                        { conversation.recentMessage[0].createdAt }
+                                        { conversation.recentMessage.createdAt }
                                     </Moment>
                                 </div>
                                 <div className="row pl-3">
-                                    <p className="font-weight-light pl-3 col-10 font-italic m-0" style={{ color: "#bbb" }}>{conversation.recentMessage[0].body}</p>
+                                    <p className="font-weight-light pl-3 col-10 font-italic m-0" style={{ color: "#bbb" }}>{conversation.recentMessage.body}</p>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +64,7 @@ class ConversationList extends Component {
 }
 
 const mapStateToProps = state => {
-    return { user: state.user }
+    return { user: state.user, selected: state.conversations.selected }
 }
 
 export default connect(mapStateToProps, { acceptRequest, findConversation })(ConversationList);

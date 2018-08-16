@@ -1,4 +1,4 @@
-import { SEARCH_USERS } from "../actions/types";
+import { SEARCH_USERS, UPDATE_SEARCH } from "../actions/types";
 
 export default (state = [], action) => {
     switch (action.type) {

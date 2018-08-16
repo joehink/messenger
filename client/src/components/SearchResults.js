@@ -4,15 +4,15 @@ import { sendRequest, acceptRequest, findOrBeginConversation } from "../actions"
 
 class SearchResults extends Component {
     renderRequestStatus(result) {
-        const { user, acceptRequest, sendRequest } = this.props;
+        const { user, acceptRequest, sendRequest, socket } = this.props;
         if (user.sentRequests.includes(result._id)) {
             return <p className="ml-3 m-0 font-italic" style={{ color: "#bbb" }}>Request sent</p>
-        } else if (user.pendingRequests.includes(result._id)) {
+        } else if (user.pendingRequests.find(request => request._id === result._id)) {
             return (
                     <button 
                         className="btn btn-success btn-sm ml-3"
                         value={result._id}
-                        onClick={event => acceptRequest(event)}
+                        onMouseDown={() => acceptRequest(result, user, socket)}
                     >
                         Accept request
                     </button>
@@ -22,7 +22,7 @@ class SearchResults extends Component {
                     <button 
                         className="btn btn-primary btn-sm ml-3"
                         value={result._id}
-                        onClick={event => sendRequest(event)}
+                        onMouseDown={() => sendRequest(result, user, socket)}
                     >
                         Send request
                     </button>
@@ -39,7 +39,7 @@ class SearchResults extends Component {
                     <li 
                         key={result._id}
                         className="list-group-item result" 
-                        onMouseDown={user.contacts.some(contact => contact._id === result._id) && (() => this.props.findOrBeginConversation(user, result, conversations))}
+                        onMouseDown={user.contacts.some(contact => contact._id === result._id) ? (() => this.props.findOrBeginConversation(user, result, conversations)) : null}
                     >
                         <div className="row w-100">
                             <div className="col-3">
@@ -69,8 +69,8 @@ class SearchResults extends Component {
 }
 
 const mapStateToProps = state => {
-    const { user, conversations } = state;
-    return { user, conversations: conversations.conversations }
+    const { user, conversations, socket } = state;
+    return { user, conversations: conversations.conversations, socket }
 }
 
 export default connect(mapStateToProps, { sendRequest, acceptRequest, findOrBeginConversation })(SearchResults);

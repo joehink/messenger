@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { acceptRequest, findOrBeginConversation } from "../actions";
+import RequestList from "./RequestList";
 
 class ContactList extends Component {
     state = { selected: "" }
@@ -31,9 +32,16 @@ class ContactList extends Component {
             )   
         })
     }
+    renderRequestList() {
+        if (this.props.user.pendingRequests.length > 0) {
+            return <RequestList />
+        }
+    }
     render() {
         return (
             <div id="contactList">
+                {this.renderRequestList()}
+                <h6 className="pl-3 pt-4 pb-0">Contacts</h6>
                 <ul className="list-group list-group-flush">
                     { this.renderContacts() }
                 </ul>

@@ -35,7 +35,8 @@ export default (state = DEFAULT_STATE, action) => {
                 ...state,
                 selected: {
                     ...state.selected,
-                    messages: [...state.selected.messages, action.payload]
+                    messages: [...state.selected.messages, action.payload],
+                    draftedMessage: ""
                 }
             }
         case SET_NEW_CONVERSATION:

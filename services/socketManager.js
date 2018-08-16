@@ -23,5 +23,13 @@ module.exports = io => {
         socket.on("NEW_CONVERSATION", conversation => {
             socket.to(users[conversation.message.to]).emit("ADD_CONVERSATION", conversation)
         })
+
+        socket.on("SEND_REQUEST", data => {
+            socket.to(users[data.to]).emit("ADD_PENDING_REQUEST", data.user)
+        })
+
+        socket.on("ACCEPT_REQUEST", data => {
+            socket.to(users[data.to]).emit("ADD_CONTACT", data.user)
+        });
     })
 }

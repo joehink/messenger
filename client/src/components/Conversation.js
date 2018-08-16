@@ -11,7 +11,9 @@ class Conversation extends Component {
             return messages.map(message => {
                 return <p 
                             className={(message.to === participant._id ? "align-self-end" : "align-self-start") + " message"} 
-                            key={message._id}>{message.body}
+                            key={message._id}
+                        >
+                            {message.body}
                         </p>
             })
         }
@@ -41,7 +43,7 @@ class Conversation extends Component {
     }
     render() {
         return (
-            <div id="conversation" className="pb-5">
+            <div id="conversation">
                 { this.renderConversation() }
                 <div id="messages" className="p-4 d-flex w-100 flex-column messages" ref="messageList">
                     { this.renderMessages() }

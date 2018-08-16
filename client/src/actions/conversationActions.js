@@ -13,7 +13,7 @@ export const fetchConversations = () =>
 
 export const findConversation = (user, conversation) => 
     async dispatch => {
-        const res = await axios.get(`/api/conversations/${conversation._id}`)
+        let res = await axios.get(`/api/conversations/${conversation._id}`)
         const participant = conversation.participants.find(participant => user._id !== participant._id)
         dispatch({
             type: SET_SELECTED_CONVERSATION,
@@ -23,6 +23,11 @@ export const findConversation = (user, conversation) =>
                 messages: res.data.messages,
                 draftedMessage: ""
             }
+        })
+        res = await axios.get("/api/conversations");
+        dispatch({
+            type: FETCH_CONVERSATIONS,
+            payload: res.data.conversations
         })
     }
 
@@ -76,6 +81,13 @@ export const sendMessageOrCreateConversation = (conversation, socket) =>
                     draftedMessage: ""
                 }
             })
+            dispatch({ 
+                type: SET_NEW_CONVERSATION,
+                payload: {
+                    ...res.data.conversation,
+                    recentMessage: res.data.message
+                }
+             })
         } else {
             const res = await axios.post(`/api/conversations/${conversation.id}`, { message: conversation.draftedMessage, to: conversation.participant })
             socket.emit("SEND_MESSAGE", res.data.message);
@@ -83,26 +95,29 @@ export const sendMessageOrCreateConversation = (conversation, socket) =>
                 type: SET_NEW_MESSAGE,
                 payload: res.data.message
             })
+            dispatch({
+                type: FETCH_CONVERSATIONS,
+                payload: res.data.conversations
+            })
         }
     }
 
-export const addMessage = (message, conversations) => {
-    if (message.conversationID === conversations.selected.id) {   
-        return {
-                type: SET_NEW_MESSAGE,
-                payload: message
-            }
-    } else {
-        const newConversations = conversations.conversations.map(conversation => {
-            if (conversation._id === message.conversationID) {
-                conversation.recentMessage = message
-                return conversation;
-            }
-            return conversation;
+export const addMessage = (message, conversations) => 
+    async dispatch => {
+        if (message.conversationID === conversations.selected.id) {   
+            dispatch({
+                    type: SET_NEW_MESSAGE,
+                    payload: message
+                })
+        } 
+       
+        const res = await axios.get("/api/conversations");
+        dispatch({
+            type: FETCH_CONVERSATIONS,
+            payload: res.data.conversations
         })
-        return { type: FETCH_CONVERSATIONS, payload: newConversations }
-    } 
-}
+    }
+    
 
 export const addConversation = data => {
     return { 
