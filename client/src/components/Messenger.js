@@ -10,15 +10,13 @@ import TextInput from "./TextInput";
 
 import { userConnected, fetchConversations, addMessage, addConversation, addContact, addPendingRequest } from "../actions";
 
-const socket = io("http://localhost:5000");
-
 class Messenger extends Component {
     componentDidMount() {
-        this.socket = io("http://localhost:5000");
+        this.socket = io((process.env.NODE_ENV === "production" ? "" : "http://localhost:5000"));
         const { user, userConnected, fetchConversations } = this.props;
 
         if (user) {
-            userConnected(socket)
+            userConnected(this.socket)
             fetchConversations();
             console.log(user)
         }
