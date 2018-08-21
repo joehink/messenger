@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const async = require("async");
 const Conversation = mongoose.model("conversations");
 const Message = mongoose.model("messages");
 const User = mongoose.model("users");
@@ -14,11 +15,9 @@ module.exports = app => {
             const message = await Message.find({ conversationID: conversation._id })
                     .sort("-createdAt")
                     .limit(1)
-                    .populate({
-                        path: "author", model: User
-                    })
+                    .populate({ path: "author", model: User })
                     .exec();
-                conversation.recentMessage = message[0];
+            conversation.recentMessage = message[0];
             return conversation;
         })
         Promise.all(userConversations).then(values => {
@@ -27,22 +26,30 @@ module.exports = app => {
     })
 
     // Get a single conversation
-    app.get("/api/conversations/:conversationID", async (req, res) => {
-        let conversation = await Conversation.findById(req.params.conversationID);
-        console.log(conversation.notify, req.user.id)
-        if (String(conversation.notify) === req.user.id) {
-            conversation = await Conversation.findByIdAndUpdate(req.params.conversationID, {
-                notify: null
-            }, {new: true});
-        }
-    
-        const messages = await Message.find({ conversationID: req.params.conversationID })
-            .sort("createdAt")
-            .populate({
-                path: "author", model: User
-            })
-            .exec();
-        res.send({conversation, messages});
+    app.get("/api/conversations/:conversationID", (req, res) => {
+        async.parallel({
+            conversation(callback) {
+                Conversation.findById(req.params.conversationID, (err, result) => {
+                    if (err) { throw err; }
+                    if (String(result.notify) === req.user.id) {
+                        Conversation.findByIdAndUpdate(req.params.conversationID, {
+                            notify: null
+                        }, {new: true}, (err, result) => callback(err, result));
+                    } else {
+                        callback(null, {})
+                    }
+                })
+            },
+            messages(callback) {
+                Message.find({ conversationID: req.params.conversationID })
+                .sort("createdAt")
+                .populate({ path: "author", model: User })
+                .exec((err, result) => callback(err, result));
+            }
+        }, (err, results) => {
+            if (err) { throw err; }
+            res.send({conversation: results.conversation, messages: results.messages})
+        })
     })
 
     // Create a new conversation

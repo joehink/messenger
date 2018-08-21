@@ -13,7 +13,7 @@ module.exports = app => {
     app.post("/api/user/search", async (req, res) => {
         const users = await User.find({fullName: { "$regex": req.body.searchTerm, "$options": "i" }})
                 .limit(25)
-                .select("-contacts")
+                .select("-contacts -pendingRequests -sentRequests")
                 .exec()
         if (req.body.searchTerm) {
             res.send({ users });
