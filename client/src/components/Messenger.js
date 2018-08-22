@@ -8,7 +8,7 @@ import SideBar from "./SideBar";
 import Conversation from "./Conversation";
 import TextInput from "./TextInput";
 
-import { userConnected, fetchConversations, addMessage, addConversation, addContact, addPendingRequest } from "../actions";
+import { userConnected, fetchConversations, addMessage, addContact, addPendingRequest } from "../actions";
 
 class Messenger extends Component {
     componentDidMount() {
@@ -18,7 +18,6 @@ class Messenger extends Component {
         if (user) {
             userConnected(this.socket)
             fetchConversations();
-            console.log(user)
         }
 
         this.socket.emit("login", user._id)
@@ -40,12 +39,12 @@ class Messenger extends Component {
         })
     }
     listeners(event, data) {
-        const { addMessage, conversations, addConversation, addPendingRequest, addContact } = this.props
+        const { addMessage, conversations, fetchConversations, addPendingRequest, addContact } = this.props
         switch (event) {
             case "DELIVER_MESSAGE":
                 return addMessage(data, conversations)
             case "ADD_CONVERSATION":
-                return addConversation(data)
+                return fetchConversations()
             case "ADD_CONTACT":
                 return addContact(data);
             case "ADD_PENDING_REQUEST":
@@ -71,4 +70,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps, { userConnected, fetchConversations, addMessage, addConversation, addContact, addPendingRequest })(Messenger);
+export default connect(mapStateToProps, { userConnected, fetchConversations, addMessage, addContact, addPendingRequest })(Messenger);

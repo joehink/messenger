@@ -1,8 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { sendRequest, acceptRequest, findOrBeginConversation } from "../actions";
+import { sendRequest, acceptRequest, beginConversation, findConversation } from "../actions";
 
 class SearchResults extends Component {
+    onResultClick(result) {
+        const { findConversation, beginConversation, user, conversations } = this.props;
+        const savedConversation = this.conversationExists(user, result, conversations)
+        if (savedConversation) {
+            findConversation(user, savedConversation)
+        } else {
+            beginConversation(result)
+        }
+    }
+    conversationExists(user, result, conversations) {
+        return conversations.find(conversation =>  {
+            return conversation.participants.every(participant => {
+                return participant._id === user._id || participant._id === result._id
+            })
+        })
+    }
     renderRequestStatus(result) {
         const { user, acceptRequest, sendRequest, socket } = this.props;
         if (user.sentRequests.includes(result._id)) {
@@ -32,14 +48,14 @@ class SearchResults extends Component {
         }
     }
     renderResults() {
-        const { results, user, conversations } = this.props;
+        const { results, user } = this.props;
         return results.map(result => {
             if (user._id !== result._id) {
                 return (    
                     <li 
                         key={result._id}
                         className="list-group-item result" 
-                        onMouseDown={user.contacts.some(contact => contact._id === result._id) ? (() => this.props.findOrBeginConversation(user, result, conversations)) : null}
+                        onMouseDown={user.contacts.some(contact => contact._id === result._id) ? (() => this.onResultClick(result)) : null}
                     >
                         <div className="row w-100">
                             <div className="col-3">
@@ -73,4 +89,4 @@ const mapStateToProps = state => {
     return { user, conversations: conversations.conversations, socket }
 }
 
-export default connect(mapStateToProps, { sendRequest, acceptRequest, findOrBeginConversation })(SearchResults);
+export default connect(mapStateToProps, { sendRequest, acceptRequest, beginConversation, findConversation })(SearchResults);

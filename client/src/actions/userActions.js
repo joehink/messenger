@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_USER, SEARCH_USERS, UPDATE_CONTACTS, UPDATE_PENDING_REQUESTS, UPDATE_SENT_REQUESTS, UPDATE_SEARCH } from "./types";
+import { FETCH_USER, SEARCH_USERS, UPDATE_CONTACTS, UPDATE_PENDING_REQUESTS, UPDATE_SENT_REQUESTS } from "./types";
 
 export const fetchUser = () => 
     async dispatch => {

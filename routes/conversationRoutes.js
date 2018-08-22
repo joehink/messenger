@@ -36,7 +36,7 @@ module.exports = app => {
                             notify: null
                         }, {new: true}, (err, result) => callback(err, result));
                     } else {
-                        callback(null, {})
+                        callback(null, result)
                     }
                 })
             },
@@ -60,51 +60,47 @@ module.exports = app => {
         })
         .save();
 
-        const fullConversation = await Conversation.findById(conversation.id)
-                                        .populate({
-                                            path: "participants", model: User
-                                        })
-                                        .exec()
-
-        const message = await new Message({
-            conversationID: conversation.id,
-            body: req.body.message,
-            author: req.user.id,
-            to: req.params.recipientID
-        }).save();
-        
-        res.send({conversation: fullConversation, message})
+        async.parallel({
+            fullConversation(callback) {
+                Conversation.findById(conversation.id)
+                    .populate({
+                        path: "participants", model: User
+                    })
+                    .exec((err, result) => callback(err, result))
+            },
+            message(callback) {
+                new Message({
+                    conversationID: conversation.id,
+                    body: req.body.message,
+                    author: req.user.id,
+                    to: req.params.recipientID
+                }).save((err, result) => callback(err, result));
+            }
+        }, (err, results) => {
+            if (err) { throw err; };
+            res.send({conversation: results.fullConversation, message: results.message})
+        })
     });
 
     // Send message in conversation
     app.post("/api/conversations/:conversationID", async (req, res) => {
-        await Conversation.findByIdAndUpdate(req.params.conversationID, {
-            notify: req.body.to
-        }).exec()
-        const message = await new Message({
-            conversationID: req.params.conversationID,
-            body: req.body.message,
-            author: req.user.id,
-            to: req.body.to
-        }).save();
-
-        const conversations = await Conversation.find({ participants: req.user.id })
-                .populate({ path: "participants", model: User })
-                .lean()
-                .exec();
-        const userConversations = conversations.map(async conversation => {
-            const message = await Message.find({ conversationID: conversation._id })
-                    .sort("-createdAt")
-                    .limit(1)
-                    .populate({
-                        path: "author", model: User
-                    })
-                    .exec();
-                conversation.recentMessage = message[0];
-            return conversation;
-        })
-        Promise.all(userConversations).then(values => {
-            res.send({ conversations: values, message })
-        })
+        async.parallel({
+            updatedConversation(callback) {
+                Conversation.findByIdAndUpdate(req.params.conversationID, {
+                    notify: req.body.to
+                }).exec((err, result) => callback(err, result))
+            },
+            message(callback) {
+                new Message({
+                    conversationID: req.params.conversationID,
+                    body: req.body.message,
+                    author: req.user.id,
+                    to: req.body.to
+                }).save((err, result) => callback(err, result));
+            }
+        }, (err, results) => {
+            if (err) { throw err; }
+            res.send({ message: results.message })
+        })  
     });
 }

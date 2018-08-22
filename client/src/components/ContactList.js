@@ -1,15 +1,26 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { acceptRequest, findOrBeginConversation } from "../actions";
+import { acceptRequest, beginConversation, findConversation } from "../actions";
 import RequestList from "./RequestList";
 
 class ContactList extends Component {
     state = { selected: "" }
     onContactClick(contact) {
-        const { findOrBeginConversation, user, conversations } = this.props;
-
+        const { user, conversations, beginConversation, findConversation } = this.props;
         this.setState({ selected: contact._id })
-        findOrBeginConversation(user, contact, conversations)
+        const savedConversation = this.conversationExists(user, contact, conversations)
+        if (savedConversation) {
+            findConversation(user, savedConversation)
+        } else {
+            beginConversation(contact)
+        }
+    }
+    conversationExists(user, contact, conversations) {
+        return conversations.find(conversation =>  {
+            return conversation.participants.every(participant => {
+                return participant._id === user._id || participant._id === contact._id
+            })
+        })
     }
     renderContacts() {
         const { contacts } = this.props;
@@ -55,4 +66,4 @@ const mapStateToProps = state => {
     return { user, conversations: conversations.conversations }
 }
 
-export default connect(mapStateToProps, { acceptRequest, findOrBeginConversation })(ContactList);
+export default connect(mapStateToProps, { acceptRequest, beginConversation, findConversation })(ContactList);
