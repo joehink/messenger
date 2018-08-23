@@ -70,6 +70,13 @@
     width: 110px;
 }
 
+.contactName {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 200px;
+}
+
 .redDot {
     background-color: red;
     height: 10px;

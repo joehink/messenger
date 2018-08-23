@@ -36,7 +36,7 @@ class ContactList extends Component {
                             <img src={contact.profileIMG} alt={contact.fullName} className="rounded-circle" />
                         </div>
                         <div className="col-10 align-self-center ">
-                            <label className="mb-0 pl-3">{contact.fullName}</label>
+                            <label className="mb-0 pl-3 contactName">{contact.fullName}</label>
                         </div>
                     </div>
                 </li>   
