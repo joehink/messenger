@@ -77,6 +77,14 @@
     width: 200px;
 }
 
+.requestName {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    width: 200px;
+}
+
 .redDot {
     background-color: red;
     height: 10px;
