@@ -33,7 +33,7 @@ class ConversationList extends Component {
                             <div className="col-10 align-self-center">
                                 <div className="row pl-3 align-items-center w-100" style={{ position: "relative" }}>
                                     { this.renderNotification(conversation) }
-                                    <label className="mb-0 pl-3">{participant.fullName}</label>
+                                    <label className="mb-0 pl-3 participantName">{participant.fullName}</label>
                                     <Moment 
                                         fromNow 
                                         className="font-weight-light font-italic ml-auto"

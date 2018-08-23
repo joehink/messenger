@@ -63,6 +63,13 @@
     overflow: hidden
 }
 
+.participantName {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 110px;
+}
+
 .redDot {
     background-color: red;
     height: 10px;
