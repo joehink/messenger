@@ -1,0 +1,12 @@
+#contactList {
+    .contacts-header, .requests-header {
+        margin-left: 1rem;
+    }
+    .contactName {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 200px;
+        margin-bottom: 0;
+    }
+}

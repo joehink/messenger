@@ -24,26 +24,23 @@ class ConversationList extends Component {
                 return (    
                     <li 
                         key={conversation._id} 
-                        className={"list-group-item " + (conversation._id === this.state.selected ? "selected": "")} 
+                        className={"list-item " + (conversation._id === this.state.selected ? "selected": "")} 
                         onClick={() => this.onConversationClick(conversation)}>
-                        <div className="row w-100">
-                            <div className="col-2">
-                                <img src={participant.profileIMG} alt={participant.fullName} className="rounded-circle" />
-                            </div>
-                            <div className="col-10 align-self-center">
-                                <div className="row pl-3 align-items-center w-100" style={{ position: "relative" }}>
+                        <div className="list-item-content">
+                            <img src={participant.profileIMG} alt={participant.fullName} />
+                            <div className="name-time-wrapper">
+                                <div className="name-time">
                                     { this.renderNotification(conversation) }
-                                    <label className="mb-0 pl-3 participantName">{participant.fullName}</label>
+                                    <label className="participantName">{participant.fullName}</label>
                                     <Moment 
                                         fromNow 
-                                        className="font-weight-light font-italic ml-auto"
-                                        style={{ fontSize: "10px", display: "block" }}
+                                        className="time"
                                     >
                                         { conversation.recentMessage.createdAt }
                                     </Moment>
                                 </div>
-                                <div className="row pl-3 recentMessage w-100">
-                                    <p className="font-weight-light pl-3 col-10 font-italic m-0" style={{ color: "#bbb" }}>{conversation.recentMessage.body}</p>
+                                <div className="recentMessage">
+                                    <p>{conversation.recentMessage.body}</p>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +52,7 @@ class ConversationList extends Component {
     render() {
         return (
             <div id="conversationList">
-                <ul className="list-group list-group-flush">
+                <ul className="list">
                     { this.renderConversations() }
                 </ul>
             </div>

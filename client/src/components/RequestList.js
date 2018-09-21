@@ -9,16 +9,14 @@ class RequestList extends Component {
             return (    
                 <li 
                     key={request._id}
-                    className="list-group-item" 
+                    className="list-item" 
                 >
-                    <div className="row">
-                        <div className="col-3">
-                            <img src={request.profileIMG} alt={request.fullName} className="rounded-circle" />
-                        </div>
-                        <div className="col-9 align-self-center">
-                            <label className="mb-0 pl-3 requestName">{request.fullName}</label>
+                    <div className="list-item-content">
+                        <img src={request.profileIMG} alt={request.fullName} />
+                        <div>
+                            <label className="requestName">{request.fullName}</label>
                             <button 
-                                className="btn btn-success btn-sm ml-3"
+                                className="accept-button"
                                 value={request._id}
                                 onMouseDown={() => acceptRequest(request, user, socket)}
                             >
@@ -33,8 +31,8 @@ class RequestList extends Component {
     render() {
         return (
             <div id="requestList">
-                <h6 className="pl-3 pt-4 pb-0">Pending Requests</h6>
-                <ul className="list-group list-group-flush list">
+                <h6 className="requests-header">Pending Requests</h6>
+                <ul className="list">
                     { this.renderRequests() }
                 </ul>
             </div>

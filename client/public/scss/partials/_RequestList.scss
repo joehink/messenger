@@ -1,0 +1,19 @@
+#requestList {
+    margin-bottom: 1rem;
+    .requestName {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        width: 200px;
+        margin-left: 1rem;
+    }
+    .accept-button {
+        margin-left: 1rem;
+        background-color: $green;
+        border: none;
+        border-radius: $border-radius;
+        color: $white;
+        padding: 5px 10px;
+    }
+}

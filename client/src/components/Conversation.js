@@ -10,7 +10,7 @@ class Conversation extends Component {
         if (messages) {
             return messages.map(message => {
                 return <p 
-                            className={(message.to === participant._id ? "align-self-end" : "align-self-start") + " message"} 
+                            className={(message.to === participant._id ? "sent" : "received") + " message"} 
                             key={message._id}
                         >
                             {message.body}
@@ -22,11 +22,9 @@ class Conversation extends Component {
         const { participant } = this.props;
         if (participant) {
             return (
-                <nav className="navbar navbar-light bg-light">
-                    <a className="navbar-brand">
-                        <img src={participant.profileIMG} className="rounded-circle mr-2" width="30" height="30" alt={participant.fullName} />
-                        {participant.fullName}
-                    </a>
+                <nav>
+                    <img src={participant.profileIMG} alt={participant.fullName} />
+                    {participant.fullName}
                 </nav>
             )
         }
@@ -45,7 +43,7 @@ class Conversation extends Component {
         return (
             <div id="conversation">
                 { this.renderConversation() }
-                <div id="messages" className="p-4 d-flex w-100 flex-column messages" ref="messageList">
+                <div id="messages" className="messages" ref="messageList">
                     { this.renderMessages() }
                 </div>
             </div>

@@ -15,16 +15,16 @@ class TextInput extends Component {
     render() {
         const { conversation, composeMessage } = this.props;
         return (
-            <form className="form-inline p-2 border-top" id="textInput" onSubmit={event => event.preventDefault()}>
+            <form id="textInput" onSubmit={event => event.preventDefault()}>
                 <button 
-                    className="btn btn-primary mr-2"
+                    className="send-button"
                     disabled={!conversation.draftedMessage}
                     onClick={() => this.onSend()}
                 >
                     Send
                 </button>
                 <input 
-                    className="flex-fill p-1"
+                    className="message-input"
                     disabled={!conversation.participant} type="text" 
                     onChange={event => composeMessage(event.target.value)}
                     value={conversation.draftedMessage}

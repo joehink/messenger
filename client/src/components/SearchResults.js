@@ -22,11 +22,11 @@ class SearchResults extends Component {
     renderRequestStatus(result) {
         const { user, acceptRequest, sendRequest, socket } = this.props;
         if (user.sentRequests.includes(result._id)) {
-            return <p className="ml-3 m-0 font-italic" style={{ color: "#bbb" }}>Request sent</p>
+            return <p className="request-sent">Request sent</p>
         } else if (user.pendingRequests.find(request => request._id === result._id)) {
             return (
                     <button 
-                        className="btn btn-success btn-sm ml-3"
+                        className="accept-button"
                         value={result._id}
                         onMouseDown={() => acceptRequest(result, user, socket)}
                     >
@@ -36,7 +36,7 @@ class SearchResults extends Component {
         } else if (!user.contacts.some(contact => contact._id === result._id)) {
             return (
                     <button 
-                        className="btn btn-primary btn-sm ml-3"
+                        className="button"
                         value={result._id}
                         onMouseDown={() => sendRequest(result, user, socket)}
                     >
@@ -54,15 +54,13 @@ class SearchResults extends Component {
                 return (    
                     <li 
                         key={result._id}
-                        className="list-group-item result" 
+                        className="list-item" 
                         onMouseDown={user.contacts.some(contact => contact._id === result._id) ? (() => this.onResultClick(result)) : null}
                     >
-                        <div className="row w-100">
-                            <div className="col-3">
-                                <img src={result.profileIMG} alt={result.fullName} className="rounded-circle" />
-                            </div>
-                            <div className="col-9 align-self-center ">
-                                <label className="mb-0 pl-3">{result.fullName}</label>
+                        <div className="list-item-content">
+                            <img src={result.profileIMG} alt={result.fullName} />
+                            <div>
+                                <label className="requestName">{result.fullName}</label>
                                 { this.renderRequestStatus(result) }
                             </div>
                         </div>
@@ -76,7 +74,7 @@ class SearchResults extends Component {
     render() {
         return (
             <div id="searchResults">
-                <ul className="list-group list-group-flush list shadow">
+                <ul className="result-list">
                     { this.renderResults() }
                 </ul>
             </div>

@@ -29,27 +29,27 @@ class SideBar extends Component {
     render() {
         const { searchUsers } = this.props;
         return (
-            <div id="sideBar" className="border-right">
-                <div className="search m-3" style={{minWidth: "300px"}}>
+            <div id="sideBar">
+                <div className="search">
                     <input 
                         placeholder="Find Friends"
                         type="text" 
-                        className="form-control"
+                        className="search-bar"
                         onFocus={() => this.setState({ showResults: true })}
                         onBlur={() => this.setState({ showResults: false })}
                         onChange={event => searchUsers(event.target.value)} 
                     />
                     { this.renderSearchResults() }
                 </div>
-                <div className="d-flex justify-content-center">
+                <div className="list-navigation">
                     <button 
-                        className={"btn mr-3 mb-2 " + (this.state.list === "conversations" ? "btn-primary" : "btn-light" )} 
+                        className={"button left-button " + (this.state.list === "conversations" ? "selected-list" : "" )} 
                         onClick={() => this.setState({ list: "conversations" })}
                     >
                         Conversations
                     </button>
                     <button 
-                        className={"btn ml-3 mb-2 " + (this.state.list === "contacts" ? "btn-primary" : "btn-light" )} 
+                        className={"button right-button " + (this.state.list === "contacts" ? "selected-list" : "" )} 
                         onClick={() => this.setState({ list: "contacts" })}
                     >
                         Contacts

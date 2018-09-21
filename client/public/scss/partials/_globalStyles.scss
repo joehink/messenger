@@ -1,0 +1,12 @@
+#messenger {
+    flex: 1;
+    display: grid;
+    grid-template-columns: auto 5fr;
+    grid-template-rows: 10fr auto;
+    grid-template-areas: "sideBar conversation"
+                         "sideBar textInput"
+}
+
+.selected {
+    background: #eee !important;
+}

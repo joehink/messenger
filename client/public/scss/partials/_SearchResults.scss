@@ -1,0 +1,42 @@
+#searchResults {
+    position: relative;
+    .result-list {
+        position: absolute;
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+        list-style-type: none;
+        padding: 0;
+        box-shadow: 0 0 15px rgba($color: #000000, $alpha: .25);
+        border-radius: $border-radius;
+    }
+    .requestName {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        width: 200px;
+        margin-left: 1rem;
+    }
+    .request-sent {
+        margin: 0 0 0 1rem;
+        color: #bbb;
+    }
+    .accept-button {
+        margin-left: 1rem;
+        background-color: $green;
+        border: none;
+        border-radius: $border-radius;
+        color: $white;
+        padding: 5px 10px;
+    }
+    .button {
+        border-radius: $border-radius;
+        border: none;
+        color: $white;
+        padding: 5px 10px;
+        background-color: $primary-color;
+        outline: none;
+        margin-left: 1rem;
+    }
+}

@@ -1,0 +1,22 @@
+.google-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-decoration: none;
+    color: black;
+    box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+    transition-property: background-color, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: ease-in-out;
+    padding: 5px 10px;
+    background-color: white;
+    border-radius: 5px;
+    &:hover {
+        text-decoration: none;
+        color: black;
+        box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
+    }
+    img {
+        width: 24px;
+    }
+}

@@ -28,23 +28,20 @@ class ContactList extends Component {
             return ( 
                 <li 
                     key={contact._id}
-                    className={"list-group-item " + (contact._id === this.state.selected ? "selected": "")} 
+                    className={"list-item " + (contact._id === this.state.selected ? "selected": "")} 
                     onClick={() => this.onContactClick(contact)}
                 >
-                    <div className="row w-100">
-                        <div className="col-2">
-                            <img src={contact.profileIMG} alt={contact.fullName} className="rounded-circle" />
-                        </div>
-                        <div className="col-10 align-self-center ">
-                            <label className="mb-0 pl-3 contactName">{contact.fullName}</label>
-                        </div>
+                    <div className="list-item-content">
+                        <img src={contact.profileIMG} alt={contact.fullName} />
+                        <label className="contactName">{contact.fullName}</label>
                     </div>
                 </li>   
             )   
         })
     }
     renderRequestList() {
-        if (this.props.user.pendingRequests.length > 0) {
+        const { pendingRequests } = this.props.user;
+        if (pendingRequests.length > 0) {
             return <RequestList />
         }
     }
@@ -52,8 +49,8 @@ class ContactList extends Component {
         return (
             <div id="contactList">
                 {this.renderRequestList()}
-                <h6 className="pl-3 pt-4 pb-0">Contacts</h6>
-                <ul className="list-group list-group-flush">
+                <h6 className="contacts-header">Contacts</h6>
+                <ul className="list">
                     { this.renderContacts() }
                 </ul>
             </div>

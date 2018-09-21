@@ -1,0 +1,39 @@
+#sideBar {
+    grid-area: sideBar;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid $border-color-light;
+    .search {
+        margin: 1rem;
+        min-width: 300px;
+    }
+    .search-bar {
+        width: 100%;
+        padding: 5px 10px;
+        border: 1px solid $border-color-dark;
+        border-radius: $border-radius;
+        outline: none;
+    }
+    .list-navigation {
+        display: flex;
+        justify-content: center;
+    }
+    .button {
+        border-radius: $border-radius;
+        border: none;
+        background-color: #EEE;
+        padding: 5px 10px;
+        color: #777;
+        outline: none;
+    }
+    .selected-list {
+        background-color: $primary-color;
+        color: $white;
+    }
+    .left-button {
+       margin: 0 1rem 1rem 0; 
+    }
+    .right-button {
+        margin: 0 0 1rem 1rem; 
+    }
+} 

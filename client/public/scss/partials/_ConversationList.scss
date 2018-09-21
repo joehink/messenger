@@ -1,0 +1,44 @@
+#conversationList {
+    .name-time-wrapper {
+        flex: 1
+    }
+    .name-time {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+    .time {
+        font-weight: 200;
+        font-style: italic;
+        margin-left: auto;
+        display: block;
+        font-size: 10px;
+    }
+    .participantName {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 110px;
+        margin-left: 1rem;
+        margin-bottom: 0;
+    }
+    .recentMessage p {
+        max-width: 225px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-style: italic;
+        color: #BBB;
+        margin-bottom: 0;
+        margin-left: 1rem;
+    }
+    .redDot {
+        background-color: red;
+        height: 10px;
+        width: 10px;
+        border-radius: 100%;
+        position: absolute;
+        left: -10px;
+        top: 0;
+    }
+}
