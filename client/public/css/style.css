@@ -17,10 +17,14 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 5px;
+  width: 100%;
 }
 
 .content {
   margin-top: 4rem;
+  border: 2px solid #DDDDDD;
+  border-radius: 7.5px;
+  padding: 0 0 1.5rem 0;
 }
 .content h1 {
   margin-top: 1.5rem;

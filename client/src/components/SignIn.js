@@ -10,7 +10,7 @@ const SignIn = () => {
                     Hello! Welcome to Messenger!
                 </p>
                 <p>
-                    Messenger is real-time chat application that utilizes WebSockets with Socket.io.
+                    Messenger is a real-time chat application that utilizes WebSockets with Socket.io.
                     Create an account to gain access to true instant messaging, and start messaging your friends.
                 </p>
 
