@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import io from "socket.io-client";
 
-import "../styles/messenger.css";
-
 import SideBar from "./SideBar";
 import Conversation from "./Conversation";
 import TextInput from "./TextInput";
