@@ -88,6 +88,9 @@
 #nav .nav-text {
   color: white;
 }
+#nav img {
+  margin-right: 5px;
+}
 
 #sideBar {
   grid-area: sideBar;
