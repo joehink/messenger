@@ -17,6 +17,7 @@
     .list-navigation {
         display: flex;
         justify-content: center;
+        min-height: 50px;
     }
     .button {
         border-radius: $border-radius;

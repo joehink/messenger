@@ -20,7 +20,7 @@ class Nav extends Component {
     }
     render() {
         return (
-            <nav id="nav">
+            <nav id="main-nav">
                 <a className="nav-brand">Messenger</a>
                 <div className="nav-links">
                     { this.renderContent() }

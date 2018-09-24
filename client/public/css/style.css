@@ -21,7 +21,7 @@
 }
 
 .content {
-  margin-top: 4rem;
+  margin: 4rem auto;
   border: 2px solid #DDDDDD;
   border-radius: 7.5px;
   padding: 0 0 1.5rem 0;
@@ -67,32 +67,33 @@
   width: 24px;
 }
 
-#nav {
+#main-nav {
   background-color: #007bff;
   padding: 5px 20px;
   display: flex;
+  min-height: 55px;
 }
-#nav .nav-brand {
+#main-nav .nav-brand {
   color: white;
   font-size: 1.75rem;
   cursor: pointer;
 }
-#nav .nav-links {
+#main-nav .nav-links {
   display: flex;
   margin-left: auto;
   align-items: center;
 }
-#nav .nav-link {
+#main-nav .nav-link {
   color: white;
   opacity: 0.75;
 }
-#nav .nav-link:hover {
+#main-nav .nav-link:hover {
   opacity: 1;
 }
-#nav .nav-text {
+#main-nav .nav-text {
   color: white;
 }
-#nav img {
+#main-nav img {
   margin-right: 5px;
 }
 
@@ -116,6 +117,7 @@
 #sideBar .list-navigation {
   display: flex;
   justify-content: center;
+  min-height: 50px;
 }
 #sideBar .button {
   border-radius: 5px;
